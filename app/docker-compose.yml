@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+    environment:
+      DB_DRIVER: ${DB_DRIVER:-sqlite} # За замовчуванням sqlite
+      DB_HOST: db
+      DB_NAME: weight_log
+      DB_USER: root
+      DB_PASSWORD: your_mysql_password
+      TABLE_NAME: weight_log
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: YourSecureDbPasswordGoesHere...
+      MYSQL_DATABASE: weight_log
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
