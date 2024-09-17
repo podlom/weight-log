@@ -16,13 +16,15 @@ if (!defined('ALLOW_DIRECT_ACCESS')) {
 }
 
 // Check if $config array is set and it is not empty
-if (!isset($config) || empty($config)) {
+if (!isset($config) || !is_array($config) || empty($config)) {
     header('HTTP/1.1 400 Bad Request');
     exit('No config.php file detected. See instructions in README.md');
 }
 
 class Database
 {
+    private array $config;
+
     private PDO $conn;
 
     private string $driver;
@@ -31,32 +33,34 @@ class Database
 
     public function __construct(array $config)
     {
-        /** @var array $config */
-        $this->driver = $config['db']['driver'];
+        /** @var array $this->config */
+        $this->config = $config;
+
+        $this->driver = $this->config['db']['driver'];
 
         try {
             if ($this->driver === 'sqlite') {
-                $dbFile = $config['db']['sqlite']['path'];
+                $dbFile = $this->config['db']['sqlite']['path'];
                 $this->conn = new PDO('sqlite:' . $dbFile);
             } elseif ($this->driver === 'mysql') {
                 $dsn = sprintf(
                     'mysql:host=%s;dbname=%s;charset=%s',
-                    $config['db']['mysql']['host'],
-                    $config['db']['mysql']['dbname'],
-                    $config['db']['mysql']['charset']
+                    $this->config['db']['mysql']['host'],
+                    $this->config['db']['mysql']['dbname'],
+                    $this->config['db']['mysql']['charset']
                 );
-                $this->conn = new PDO($dsn, $config['db']['mysql']['user'], $config['db']['mysql']['password']);
+                $this->conn = new PDO($dsn, $this->config['db']['mysql']['user'], $this->config['db']['mysql']['password']);
             } else {
-                throw new Exception("Непідтримуваний драйвер бази даних: " . $this->driver);
+                throw new Exception("От халепа, спалася помилка: непідтримуваний драйвер бази даних: " . $this->driver);
             }
 
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            $this->tableName = $config['db']['tableName'];
+            $this->tableName = $this->config['db']['tableName'];
         } catch (PDOException $e) {
-            die(__FILE__ . ' +' . __LINE__ . " Помилка підключення до бази даних: " . $e->getMessage());
+            die(__FILE__ . ' +' . __LINE__ . " От халепа, спалася помилка підключення до бази даних: " . $e->getMessage());
         } catch (Exception $e) {
-            die(__FILE__ . ' +' . __LINE__ . " Помилка: " . $e->getMessage());
+            die(__FILE__ . ' +' . __LINE__ . " От халепа, спалася помилка: " . $e->getMessage());
         }
     }
 
@@ -100,8 +104,8 @@ class Database
                 user_id INT,
                 date DATE NOT NULL,
                 time_period VARCHAR(50) NOT NULL,
-                weight FLOAT NOT NULL
-            ) ENGINE=InnoDB DEFAULT CHARSET={$config['db']['mysql']['charset']};";
+                weight DECIMAL(5,2) NOT NULL
+            ) ENGINE=InnoDB DEFAULT CHARSET={$this->config['db']['mysql']['charset']};";
         }
 
         $this->conn->exec($createTableSQL);
