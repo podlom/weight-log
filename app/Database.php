@@ -107,7 +107,7 @@ class Database
                 weight REAL NOT NULL
             );
 
-            CREATE TABLE {$this->getUsersTableName()} (
+            CREATE TABLE IF NOT EXISTS {$this->getUsersTableName()} (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 google_id TEXT NOT NULL,
                 name TEXT NOT NULL,
@@ -123,7 +123,7 @@ class Database
                 weight DECIMAL(5,2) NOT NULL
             ) ENGINE=InnoDB DEFAULT CHARSET={$this->config['db']['mysql']['charset']};
 
-            CREATE TABLE {$this->getUsersTableName()} (
+            CREATE TABLE IF NOT EXISTS {$this->getUsersTableName()} (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 google_id VARCHAR(255) UNIQUE,
                 name VARCHAR(255),
