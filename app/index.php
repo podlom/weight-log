@@ -36,6 +36,13 @@ try {
     die(__FILE__ . ' +' . __LINE__ . " От, халепа, сталась інша помилка: " . $e->getMessage());
 }
 
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit;
+}
+
 $n = 0;
 
 ?>
@@ -52,6 +59,12 @@ $n = 0;
     <body>
     <div class="container">
         <h1>Щоденник показників вимірювання ваги</h1>
+
+        <?php
+            echo "Привіт, " . htmlspecialchars($_SESSION['user_name']);
+            echo '<br><a href="logout.php">Вийти з щоденника</a>';
+        ?>
+
         <table>
             <caption>Дані записів щоденника показників ваги</caption>
             <thead>

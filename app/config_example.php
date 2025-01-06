@@ -25,6 +25,7 @@ $user = $_ENV['DB_USER'] ?: 'root';
 $password = $_ENV['DB_PASSWORD'] ?: '';
 $charset = $_ENV['DB_CHARSET'] ?: 'utf8mb4';
 $tableName = $_ENV['TABLE_NAME'] ?: 'weight_log';
+$usersTableName = $_ENV['TABLE_USERS'] ?: 'users';
 
 $config = [
     'db' => [
@@ -40,5 +41,6 @@ $config = [
             'charset' => $charset,
         ],
         'tableName' => $tableName,
+        'usersTableName' => $usersTableName,
     ],
 ];

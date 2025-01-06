@@ -21,7 +21,7 @@ try {
     /** @var array $config */
     $database = new Database($config);
     $conn = $database->getConnection();
-    $database->createTable();
+    $database->createTables();
 } catch (Exception $e) {
     die(__FILE__ . ' +' . __LINE__ . " От халепа, сталася помилка: " . $e->getMessage());
 }

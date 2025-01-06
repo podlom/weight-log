@@ -31,6 +31,8 @@ class Database
 
     private string $tableName;
 
+    private string $usersTableName;
+
     public function __construct(array $config)
     {
         /** @var array $this->config */
@@ -57,6 +59,7 @@ class Database
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             $this->tableName = $this->config['db']['tableName'];
+            $this->usersTableName = $this->config['db']['usersTableName'];
         } catch (PDOException $e) {
             die(__FILE__ . ' +' . __LINE__ . " От халепа, спалася помилка підключення до бази даних: " . $e->getMessage());
         } catch (Exception $e) {
@@ -85,7 +88,12 @@ class Database
         return $this->tableName;
     }
 
-    public function createTable(): void
+    public function getUsersTableName(): string
+    {
+        return $this->usersTableName;
+    }
+
+    public function createTables(): void
     {
         /** @var array $config */
         $createTableSQL = "";
@@ -105,7 +113,15 @@ class Database
                 date DATE NOT NULL,
                 time_period VARCHAR(50) NOT NULL,
                 weight DECIMAL(5,2) NOT NULL
-            ) ENGINE=InnoDB DEFAULT CHARSET={$this->config['db']['mysql']['charset']};";
+            ) ENGINE=InnoDB DEFAULT CHARSET={$this->config['db']['mysql']['charset']};
+
+            CREATE TABLE {$this->getUsersTableName()} (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                google_id VARCHAR(255) UNIQUE,
+                name VARCHAR(255),
+                email VARCHAR(255) UNIQUE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );";
         }
 
         $this->conn->exec($createTableSQL);

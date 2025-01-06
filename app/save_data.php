@@ -72,7 +72,7 @@ try {
     /** @var array $config */
     $database = new Database($config);
     $conn = $database->getConnection();
-    $database->createTable();
+    $database->createTables();
     $table = $database->getTableName();
 
     // Збереження даних у базу
