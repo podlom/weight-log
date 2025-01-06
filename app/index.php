@@ -19,6 +19,13 @@ if (!isset($conn)) {
     require_once 'setup_db_1.php';
 }
 
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit;
+}
+
 // Створюємо підключення до бази даних
 try {
     /** @var array $config */
@@ -26,21 +33,16 @@ try {
     $conn = $database->getConnection();
     $table = $database->getTableName();
 
+    $userId = $_SESSION['user_id'] ?: 1;
+
     // Отримуємо дані з бази
-    $sql = "SELECT date, time_period, weight FROM {$table} WHERE user_id = 1 ORDER BY date DESC";
+    $sql = "SELECT date, time_period, weight FROM {$table} WHERE user_id = {$userId} ORDER BY date DESC";
     $stmt = $conn->query($sql);
 
 } catch (PDOException $e) {
     die(__FILE__ . ' +' . __LINE__ . " От, халепа, помилка підключення до бази даних: " . $e->getMessage());
 } catch (Exception $e) {
     die(__FILE__ . ' +' . __LINE__ . " От, халепа, сталась інша помилка: " . $e->getMessage());
-}
-
-session_start();
-
-if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
-    exit;
 }
 
 $n = 0;

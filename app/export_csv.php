@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-
 /**
  * @author Taras Shkodenko <podlom@gmail.com>
- * @copyright Shkodenko V. Taras 2024
+ * @copyright Shkodenko V. Taras 2025
  */
+
+session_start();
 
 // Define a constant to be used for allowing direct access
 define('ALLOW_DIRECT_ACCESS', true);
@@ -20,8 +21,10 @@ try {
     $conn = $database->getConnection();
     $table = $database->getTableName();
 
+    $userId = $_SESSION['user_id'] ?: 1;
+
     // Отримуємо дані з таблиці
-    $sql = "SELECT date, time_period, weight FROM {$table} WHERE user_id = 1 ORDER BY date DESC";
+    $sql = "SELECT date, time_period, weight FROM {$table} WHERE user_id = {$userId} ORDER BY date DESC";
     $stmt = $conn->query($sql);
 
     // Встановлюємо заголовки для експорту у CSV

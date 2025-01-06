@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-
 /**
  * @author Taras Shkodenko <podlom@gmail.com>
- * @copyright Shkodenko V. Taras 2024
+ * @copyright Shkodenko V. Taras 2025
  */
 
 // Define a constant to be used for allowing direct access
@@ -23,7 +22,7 @@ use Dotenv\Dotenv;
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-
+session_start();
 
 try {
     /** @var array $config */
@@ -57,9 +56,11 @@ try {
             $time_period = $data[1];
             $weight = (float)$data[2];
 
+            $userId = $_SESSION['user_id'] ?: 1;
+
             // Вставляємо в базу даних
             $stmt->execute([
-                ':user_id' => 1, // Тут ти можеш підставити актуального користувача
+                ':user_id' => $userId,
                 ':date' => $date,
                 ':time_period' => $time_period,
                 ':weight' => $weight,

@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-
 /**
  * @author Taras Shkodenko <podlom@gmail.com>
- * @copyright Shkodenko V. Taras 2024
+ * @copyright Shkodenko V. Taras 2025
  */
 
 session_start();
@@ -77,8 +76,10 @@ try {
 
     // Збереження даних у базу
     $stmt = $conn->prepare("INSERT INTO {$table} (user_id, date, time_period, weight) VALUES (?, ?, ?, ?)");
-    $user_id = 1; // Якщо є авторизація, можна додати унікального користувача
-    $stmt->execute([$user_id, $date, $time_period, $weight]);
+
+    $userId = $_SESSION['user_id'] ?: 1;
+
+    $stmt->execute([$userId, $date, $time_period, $weight]);
 
     // TODO: перевірити чи треба це тут ?
     if (isset($_SESSION['form_errors']) && !empty($_SESSION['form_errors'])) {

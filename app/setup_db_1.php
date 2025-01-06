@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @author Taras Shkodenko <podlom@gmail.com>
- * @copyright Shkodenko V. Taras 2024
+ * @copyright Shkodenko V. Taras 2025
  */
 
 // Prevent direct access to this file

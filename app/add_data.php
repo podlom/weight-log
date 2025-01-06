@@ -6,7 +6,7 @@ session_start();
 
   /**
    * @author Taras Shkodenko <podlom@gmail.com>
-   * @copyright Shkodenko V. Taras 2024
+   * @copyright Shkodenko V. Taras 2025
    */
     date_default_timezone_set('Europe/Kyiv');
 

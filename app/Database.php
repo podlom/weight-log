@@ -99,15 +99,23 @@ class Database
         $createTableSQL = "";
 
         if ($this->driver === 'sqlite') {
-            $createTableSQL = "CREATE TABLE IF NOT EXISTS {$this->tableName} (
+            $createTableSQL = "CREATE TABLE IF NOT EXISTS {$this->getTableName()} (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 user_id INTEGER,
                 date TEXT NOT NULL,
                 time_period TEXT NOT NULL,
                 weight REAL NOT NULL
+            );
+
+            CREATE TABLE {$this->getUsersTableName()} (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                google_id TEXT NOT NULL,
+                name TEXT NOT NULL,
+                email TEXT NOT NULL,
+                created_at TEXT NOT NULL
             );";
         } elseif ($this->driver === 'mysql') {
-            $createTableSQL = "CREATE TABLE IF NOT EXISTS {$this->tableName} (
+            $createTableSQL = "CREATE TABLE IF NOT EXISTS {$this->getTableName()} (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id INT,
                 date DATE NOT NULL,
@@ -121,7 +129,7 @@ class Database
                 name VARCHAR(255),
                 email VARCHAR(255) UNIQUE,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            );";
+            ) ENGINE=InnoDB DEFAULT CHARSET={$this->config['db']['mysql']['charset']};";
         }
 
         $this->conn->exec($createTableSQL);
