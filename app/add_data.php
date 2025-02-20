@@ -6,7 +6,7 @@ session_start();
 
   /**
    * @author Taras Shkodenko <podlom@gmail.com>
-   * @copyright Shkodenko V. Taras 2024
+   * @copyright Shkodenko V. Taras 2025
    */
     date_default_timezone_set('Europe/Kyiv');
 
@@ -30,7 +30,11 @@ session_start();
 <body>
     <div class="container">
         <h1><a href="/" title="Щоденник показників вимірювання тиску та пульсу | записи щоденника">Щоденник ваги</a> - додати новий запис</h1>
+
         <?php
+
+            echo "Привіт, " . htmlspecialchars($_SESSION['user_name']);
+            echo '<br><a href="logout.php">Вийти з щоденника</a>';
 
             // Перевіряємо, чи є збережені помилки у сесії
             if (!empty($_SESSION['form_errors'])) {
@@ -43,6 +47,7 @@ session_start();
             }
 
         ?>
+
         <form method="POST" action="save_data.php">
             <label for="date">Дата:</label>
             <input id="date" type="date" name="date" value="<?= $currentDate ?>" required><br>

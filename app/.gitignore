@@ -8,3 +8,4 @@ config.php
 vendor/*
 # ignore composer.lock
 composer.lock
+# ignore .idea
